@@ -273,12 +273,15 @@
             <form class="cta-form" (ngSubmit)="onSubmit()">
                 <div class="cta-input-wrapper">
                     <div class="cta-input-glow"></div>
-                    <input type="email" placeholder="email@address.com" class="cta-email-input">
+                    <input type="email" placeholder="email@address.com" class="cta-email-input" [(ngModel)]="email" name="email" required [disabled]="isSubmitting">
                 </div>
-                <button type="button" class="cta-submit-button">
-                    Get Early Access
+                <button type="submit" class="cta-submit-button" [disabled]="isSubmitting">
+                    {{ isSubmitting ? 'Joining...' : 'Get Early Access' }}
                 </button>
-                <p class="cta-disclaimer">Unsubscribe at any time.</p>
+                <p class="cta-disclaimer" *ngIf="!clickMessage">Unsubscribe at any time.</p>
+                <p class="cta-disclaimer" [style.color]="clickMessage.includes('✅') ? '#10b981' : '#ef4444'" *ngIf="clickMessage">
+                    {{ clickMessage }}
+                </p>
             </form>
         </section>
 
