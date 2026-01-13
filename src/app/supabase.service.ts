@@ -22,6 +22,29 @@ export class SupabaseService {
       .select();
 
     if (error) throw error;
+    // Then, send confirmation email
+    try {
+      await this.sendConfirmationEmail(email);
+    } catch (emailError) {
+      console.error('Failed to send confirmation email:', emailError);
+      // Don't throw - email saved successfully, email sending is secondary
+    }
+
     return data;
+  }
+
+  private async sendConfirmationEmail(email: string): Promise<void> {
+    const response = await fetch('http://localhost:3001/api/send-confirmation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to send email');
+    }
   }
 }

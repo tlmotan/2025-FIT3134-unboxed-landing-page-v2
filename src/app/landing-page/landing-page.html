@@ -42,14 +42,14 @@
             </p>
 
             <!-- Waitlist Capture Form -->
-            <div id="join-waitlist" class="waitlist-form-container">
+            <div class="waitlist-form-container">
                 <form class="waitlist-form" (ngSubmit)="onSubmit()">
                     <div class="form-icon">
                         <i data-lucide="mail"></i>
                     </div>
-                    <input type="email" placeholder="Enter your email address..." class="email-input" [(ngModel)]="email" name="email" required [disabled]="isSubmitting">
-                    <button type="submit" class="submit-button" [disabled]="isSubmitting">
-                        {{ isSubmitting ? 'Joining...' : 'Join Waitlist' }}
+                    <input type="email" placeholder="Enter your email address..." class="email-input" [(ngModel)]="email" name="email" required [disabled]="isSubmitting || isSuccess">
+                    <button type="submit" class="submit-button" [disabled]="isSubmitting || isSuccess">
+                        {{ isSuccess ? '✓ Joined!' : (isSubmitting ? 'Joining...' : 'Join Waitlist') }}
                     </button>
                     <p class="cta-disclaimer" [style.color]="clickMessage.includes('✅') ? '#10b981' : '#ef4444'" *ngIf="clickMessage">
                         {{ clickMessage }}
@@ -262,7 +262,7 @@
         </section>
 
         <!-- CTA Section (Focused) -->
-        <section class="cta-section">
+        <section id="join-waitlist" class="cta-section">
             <!-- Glow background -->
             <div class="cta-glow"></div>
 
@@ -276,10 +276,10 @@
             <form class="cta-form" (ngSubmit)="onSubmit()">
                 <div class="cta-input-wrapper">
                     <div class="cta-input-glow"></div>
-                    <input type="email" placeholder="email@address.com" class="cta-email-input" [(ngModel)]="email" name="email" required [disabled]="isSubmitting">
+                    <input type="email" placeholder="email@address.com" class="cta-email-input" [(ngModel)]="email" name="email" required [disabled]="isSubmitting || isSuccess">
                 </div>
-                <button type="submit" class="cta-submit-button" [disabled]="isSubmitting">
-                    {{ isSubmitting ? 'Joining...' : 'Get Early Access' }}
+                <button type="submit" class="cta-submit-button" [disabled]="isSubmitting || isSuccess">
+                    {{ isSuccess ? '✓ Joined!' : (isSubmitting ? 'Joining...' : 'Get Early Access') }}
                 </button>
                 <p class="cta-disclaimer" *ngIf="!clickMessage">Unsubscribe at any time.</p>
                 <p class="cta-disclaimer" [style.color]="clickMessage.includes('✅') ? '#10b981' : '#ef4444'" *ngIf="clickMessage">

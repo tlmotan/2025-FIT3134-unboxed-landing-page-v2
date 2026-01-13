@@ -8,10 +8,10 @@ console.log('🧪 Testing Email Configuration...\n');
 
 // Verify environment variables
 console.log('📋 Checking environment variables:');
-console.log(`   OUTLOOK_EMAIL: ${process.env.OUTLOOK_EMAIL ? '✅ Set' : '❌ Not set'}`);
-console.log(`   OUTLOOK_PASSWORD: ${process.env.OUTLOOK_PASSWORD ? '✅ Set' : '❌ Not set'}`);
+console.log(`   GMAIL_ACCOUNT: ${process.env.GMAIL_ACCOUNT ? '✅ Set' : '❌ Not set'}`);
+console.log(`   GMAIL_PASSWORD: ${process.env.GMAIL_PASSWORD ? '✅ Set' : '❌ Not set'}`);
 
-if (!process.env.OUTLOOK_EMAIL || !process.env.OUTLOOK_PASSWORD) {
+if (!process.env.GMAIL_ACCOUNT || !process.env.GMAIL_PASSWORD) {
   console.error('\n❌ Error: Missing environment variables');
   console.log('Please create a .env file with your Outlook credentials');
   process.exit(1);
@@ -24,8 +24,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   auth: {
-    user: process.env.OUTLOOK_EMAIL,
-    pass: process.env.OUTLOOK_PASSWORD
+    user: process.env.GMAIL_ACCOUNT,
+    pass: process.env.GMAIL_PASSWORD
   },
   tls: {
     ciphers: 'SSLv3',
@@ -67,8 +67,8 @@ transporter.verify(async (error, success) => {
   console.log('📧 Sending test email...');
 
   const testEmail = {
-    from: `"Unboxed Team" <${process.env.OUTLOOK_EMAIL}>`,
-    to: process.env.OUTLOOK_EMAIL, // Send to yourself
+    from: `"Unboxed Team" <${process.env.GMAIL_ACCOUNT}>`,
+    to: process.env.GMAIL_ACCOUNT, // Send to yourself
     subject: '🧪 Test Email - Unboxed Waitlist Confirmation',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -78,7 +78,7 @@ transporter.verify(async (error, success) => {
         <ul>
           <li>SMTP Host: smtp.office365.com</li>
           <li>Port: 587</li>
-          <li>Email: ${process.env.OUTLOOK_EMAIL}</li>
+          <li>Email: ${process.env.GMAIL_ACCOUNT}</li>
         </ul>
         <p>You're all set to send waitlist confirmation emails! 🎉</p>
       </div>
@@ -90,7 +90,7 @@ transporter.verify(async (error, success) => {
     const info = await transporter.sendMail(testEmail);
     console.log('✅ Test email sent successfully!');
     console.log(`   Message ID: ${info.messageId}`);
-    console.log(`   Sent to: ${process.env.OUTLOOK_EMAIL}`);
+    console.log(`   Sent to: ${process.env.GMAIL_ACCOUNT}`);
     console.log('\n🎉 Email system is working correctly!');
     console.log('\nCheck your inbox (and spam folder) for the test email.');
   } catch (error) {

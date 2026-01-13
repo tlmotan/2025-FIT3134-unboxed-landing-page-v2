@@ -26,8 +26,8 @@ serve(async (req) => {
     }
 
     // Get Outlook credentials from environment variables
-    const outlookEmail = Deno.env.get('OUTLOOK_EMAIL')
-    const outlookPassword = Deno.env.get('OUTLOOK_PASSWORD')
+    const outlookEmail = Deno.env.get('GMAIL_ACCOUNT')
+    const outlookPassword = Deno.env.get('GMAIL_PASSWORD')
     
     if (!outlookEmail || !outlookPassword) {
       console.error('Missing email credentials')
