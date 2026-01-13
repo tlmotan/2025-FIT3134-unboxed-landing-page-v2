@@ -1,3 +1,15 @@
+.logo-area {
+    display: flex;
+    align-items: center;
+}
+
+.logo-area img {
+    height: 2.3vh;
+    width: auto;
+    display: block;
+    margin-bottom: 0.75vh;
+}
+
 .footer {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     background-color: rgb(2, 6, 23);
@@ -52,7 +64,7 @@
 }
 
 .footer-copyright {
-    margin-left: 0.5rem;
+    margin-left: 0.1rem;
     font-size: 0.75rem;
     color: rgb(71, 85, 105);
 }

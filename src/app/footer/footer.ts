@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
+
+declare const lucide: any;
 
 @Component({
   selector: 'app-footer',
@@ -6,6 +8,10 @@ import { Component } from '@angular/core';
   templateUrl: './footer.html',
   styleUrl: './footer.css',
 })
-export class Footer {
-
+export class Footer implements AfterViewInit {
+  ngAfterViewInit() {
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  }
 }

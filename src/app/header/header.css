@@ -1,3 +1,15 @@
+.logo-area {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo-area img {
+  height: 4.3vh;
+  width: auto;
+  display: block;
+}
+
 .header-nav {
     position: fixed;
     top: 0;

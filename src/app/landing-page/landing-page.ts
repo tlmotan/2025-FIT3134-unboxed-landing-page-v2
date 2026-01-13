@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Header } from "../header/header";
 import { Footer } from "../footer/footer";
 import { SupabaseService } from '../supabase.service';
 
+declare const lucide: any;
 
 @Component({
   selector: 'app-landing-page',
@@ -12,13 +13,19 @@ import { SupabaseService } from '../supabase.service';
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.css',
 })
-export class LandingPage {
+export class LandingPage implements AfterViewInit {
   title = 'My Angular App';
   email = '';
   clickMessage = '';
   isSubmitting = false;
 
   constructor(private supabaseService: SupabaseService) {}
+
+  ngAfterViewInit() {
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  }
 
   async onSubmit() {
     if (!this.email || !this.email.includes('@')) {
