@@ -10,7 +10,12 @@ import { Footer } from "../footer/footer";
   styleUrl: './landing-page.css',
 })
 export class LandingPage {
+  title = 'My Angular App';
+  clickMessage = ''; // A property to hold a message
+
   onSubmit() {
-    
+  event?.preventDefault(); // Prevent form submission
+  this.clickMessage = 'The button was clicked! 🚀';
+  console.log('Save button clicked!');
   }
 }
