@@ -1,0 +1,8 @@
+# Environment Variables - DO NOT COMMIT THIS FILE
+.env
+
+# Logs
+*.log
+
+# Node modules
+node_modules/
