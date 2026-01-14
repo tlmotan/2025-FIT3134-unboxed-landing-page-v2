@@ -5,27 +5,37 @@ require('dotenv').config();
 
 const app = express();
 
-// Configure CORS using comma-separated ALLOWED_ORIGINS env var (e.g. https://your-app.vercel.app)
-const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || '';
-const allowedOrigins = allowedOriginsEnv ? allowedOriginsEnv.split(',').map(s => s.trim()) : [];
-if (allowedOrigins.length) {
-  console.log('✅ CORS allowed origins:', allowedOrigins);
-} else {
-  console.log('⚠️ No ALLOWED_ORIGINS set — defaulting to allow all origins (not recommended for production)');
+// 1. Define allowed origins (combining Localhost + Environment Variables)
+const allowedOrigins = [
+  'http://localhost:4200', // Always allow local Angular dev
+  'http://localhost:3000', // Optional: local SSR
+];
+
+// Add origins from environment variable (e.g., your Vercel URL)
+if (process.env.ALLOWED_ORIGINS) {
+  const envOrigins = process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim());
+  allowedOrigins.push(...envOrigins);
 }
 
-const corsOptions = allowedOrigins.length
-  ? {
-      origin: (origin, callback) => {
-        // allow non-browser requests (curl, server-to-server) when origin is undefined
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
-        return callback(new Error('Not allowed by CORS'));
-      },
-    }
-  : { origin: true };
+console.log('✅ CORS allowed origins:', allowedOrigins);
 
-app.use(cors(corsOptions));
+// 2. Use the dynamic configuration
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    } else {
+      console.log(`❌ CORS blocked origin: ${origin}`);
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+}));
+
 app.use(express.json());
 
 // Create Gmail SMTP transporter
@@ -58,6 +68,7 @@ app.post('/api/send-confirmation', async (req, res) => {
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
   }
+  return res.status(200).send('Confirmation sent!');
 
   // Email HTML template
   const emailHTML = `
