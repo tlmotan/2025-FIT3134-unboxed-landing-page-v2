@@ -4,7 +4,28 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+// Configure CORS using comma-separated ALLOWED_ORIGINS env var (e.g. https://your-app.vercel.app)
+const allowedOriginsEnv = process.env.ALLOWED_ORIGINS || '';
+const allowedOrigins = allowedOriginsEnv ? allowedOriginsEnv.split(',').map(s => s.trim()) : [];
+if (allowedOrigins.length) {
+  console.log('✅ CORS allowed origins:', allowedOrigins);
+} else {
+  console.log('⚠️ No ALLOWED_ORIGINS set — defaulting to allow all origins (not recommended for production)');
+}
+
+const corsOptions = allowedOrigins.length
+  ? {
+      origin: (origin, callback) => {
+        // allow non-browser requests (curl, server-to-server) when origin is undefined
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+        return callback(new Error('Not allowed by CORS'));
+      },
+    }
+  : { origin: true };
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Create Gmail SMTP transporter
@@ -24,6 +45,11 @@ transporter.verify((error, success) => {
     console.log('✅ SMTP Server is ready to send emails');
   }
 });
+
+// Warn if Gmail credentials are missing (helps catch misconfiguration on deploy)
+if (!process.env.GMAIL_ACCOUNT || !process.env.GMAIL_PASSWORD) {
+  console.warn('⚠️ GMAIL_ACCOUNT or GMAIL_PASSWORD is not set. Email sending will fail without valid credentials.');
+}
 
 // Endpoint to send confirmation email
 app.post('/api/send-confirmation', async (req, res) => {
