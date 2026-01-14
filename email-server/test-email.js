@@ -20,7 +20,7 @@ if (!process.env.GMAIL_ACCOUNT || !process.env.GMAIL_PASSWORD) {
 console.log('\n🔧 Creating SMTP transporter...');
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.office365.com',
+  host: 'smtp.gmail.com',
   port: 587,
   secure: false,
   auth: {

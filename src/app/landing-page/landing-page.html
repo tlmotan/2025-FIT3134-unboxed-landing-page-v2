@@ -47,7 +47,7 @@
                     <div class="form-icon">
                         <i data-lucide="mail"></i>
                     </div>
-                    <input type="email" placeholder="Enter your email address..." class="email-input" [(ngModel)]="email" name="email" required [disabled]="isSubmitting || isSuccess">
+                    <input type="email" placeholder="Enter your Gmail address..." class="email-input" [(ngModel)]="email" name="email" required [disabled]="isSubmitting || isSuccess">
                     <button type="submit" class="submit-button" [disabled]="isSubmitting || isSuccess">
                         {{ isSuccess ? '✓ Joined!' : (isSubmitting ? 'Joining...' : 'Join Waitlist') }}
                     </button>

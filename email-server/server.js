@@ -38,13 +38,23 @@ app.use(cors({
 
 app.use(express.json());
 
-// Create Gmail SMTP transporter
+// Create Gmail SMTP transporter with robust settings for cloud environments
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // Use SSL
   auth: {
     user: process.env.GMAIL_ACCOUNT,
-    pass: process.env.GMAIL_PASSWORD // Must be an App Password from Google
-  }
+    pass: process.env.GMAIL_PASSWORD
+  },
+  // Force IPv4 to avoid IPv6 connection timeouts on some cloud providers (like Render)
+  family: 4,
+  // Add connection timeout setting (10 seconds)
+  connectionTimeout: 10000,
+  // Add greeting timeout setting (10 seconds)
+  greetingTimeout: 10000,
+  // Add socket timeout setting (10 seconds)
+  socketTimeout: 10000
 });
 
 // Verify transporter configuration
