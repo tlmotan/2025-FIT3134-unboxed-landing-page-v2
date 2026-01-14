@@ -43,17 +43,22 @@ export class SupabaseService {
     });
 
     if (!response.ok) {
-      let errorBody;
+      // Read the response body ONCE as text first
+      const errorBody = await response.text();
+
+      // Try to parse as JSON if possible
+      let errorMessage;
       try {
-        // Attempt to parse as JSON first
-        errorBody = await response.json();
+        const errorJson = JSON.parse(errorBody);
+        errorMessage = errorJson.error || errorBody;
       } catch (jsonError) {
-        // If parsing as JSON fails, read as plain text
-        errorBody = await response.text();
+         // If not JSON, use the text directly
+        errorMessage = errorBody;
       }
-      // Log the full error for debugging
-      console.error('Email API error:', errorBody);
-      throw new Error(errorBody.error || errorBody || `Failed to send email with status ${response.status}`);
+      
+       // Log the full error for debugging
+      console.error('Email API error:', errorMessage);
+      throw new Error(errorMessage || `Failed to send email with status ${response.status}`);
     }
   }
 }
