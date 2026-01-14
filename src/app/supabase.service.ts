@@ -43,8 +43,17 @@ export class SupabaseService {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to send email');
+      let errorBody;
+      try {
+        // Attempt to parse as JSON first
+        errorBody = await response.json();
+      } catch (jsonError) {
+        // If parsing as JSON fails, read as plain text
+        errorBody = await response.text();
+      }
+      // Log the full error for debugging
+      console.error('Email API error:', errorBody);
+      throw new Error(errorBody.error || errorBody || `Failed to send email with status ${response.status}`);
     }
   }
 }
