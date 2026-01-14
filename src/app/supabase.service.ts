@@ -16,6 +16,11 @@ export class SupabaseService {
   }
 
   async addEmailToWaitlist(email: string) {
+    // Restrict to Gmail addresses
+    if (!email.toLowerCase().endsWith('@gmail.com')) {
+      throw new Error('Only Gmail addresses are accepted.');
+    }
+
     const { data, error } = await this.supabase
       .from('email_signups')
       .insert([{ email, created_at: new Date() }])

@@ -39,22 +39,25 @@ app.use(cors({
 app.use(express.json());
 
 // Create Gmail SMTP transporter with robust settings for cloud environments
+// Using Port 587 (STARTTLS) is often more reliable on cloud providers like Render
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // Use SSL
+  port: 587,
+  secure: false, // Use STARTTLS
   auth: {
     user: process.env.GMAIL_ACCOUNT,
     pass: process.env.GMAIL_PASSWORD
   },
   // Force IPv4 to avoid IPv6 connection timeouts on some cloud providers (like Render)
   family: 4,
-  // Add connection timeout setting (10 seconds)
-  connectionTimeout: 10000,
-  // Add greeting timeout setting (10 seconds)
-  greetingTimeout: 10000,
-  // Add socket timeout setting (10 seconds)
-  socketTimeout: 10000
+  // Increase timeouts for slower cloud connections
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 20000,
+  // Allow self-signed certificates if necessary
+  tls: {
+    rejectUnauthorized: false
+  }
 });
 
 // Verify transporter configuration
@@ -77,6 +80,14 @@ app.post('/api/send-confirmation', async (req, res) => {
 
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
+  }
+
+  // Restrict to Gmail addresses if requested
+  if (!email.toLowerCase().endsWith('@gmail.com')) {
+    return res.status(400).json({ 
+      success: false, 
+      error: 'Only Gmail addresses are accepted for this waitlist.' 
+    });
   }
 
   // Email HTML template
