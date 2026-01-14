@@ -34,19 +34,17 @@ export class SupabaseService {
   }
 
   private async sendConfirmationEmail(email: string): Promise<void> {
-      // Use a deployable endpoint set in environment.emailServerUrl (must be https for Vercel)
-      const serverUrl = (environment as any).emailServerUrl || 'http://localhost:3001';
-      const response = await fetch(`${serverUrl}/api/send-confirmation`, {
-       method: 'POST',
-       headers: {
-         'Content-Type': 'application/json',
-       },
-       body: JSON.stringify({ email }),
-     });
- 
-     if (!response.ok) {
-       const error = await response.json();
-       throw new Error(error.error || 'Failed to send email');
-     }
-   }
+    const response = await fetch('/api/send-confirmation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to send email');
+    }
+  }
 }
