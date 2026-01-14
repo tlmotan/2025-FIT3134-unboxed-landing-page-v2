@@ -22,11 +22,13 @@ export class SupabaseService {
       .select();
 
     if (error) throw error;
+    
     // Then, send confirmation email
     try {
       await this.sendConfirmationEmail(email);
+      console.log('✅ Confirmation email sent successfully to:', email);
     } catch (emailError) {
-      console.error('Failed to send confirmation email:', emailError);
+      console.error('❌ Failed to send confirmation email:', emailError);
       // Don't throw - email saved successfully, email sending is secondary
     }
 
@@ -34,31 +36,41 @@ export class SupabaseService {
   }
 
   private async sendConfirmationEmail(email: string): Promise<void> {
-    const response = await fetch('https://two025-fit3134-unboxed-landing-page-v2.onrender.com/api/send-confirmation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    if (!response.ok) {
-      // Read the response body ONCE as text first
-      const errorBody = await response.text();
-
-      // Try to parse as JSON if possible
-      let errorMessage;
-      try {
-        const errorJson = JSON.parse(errorBody);
-        errorMessage = errorJson.error || errorBody;
-      } catch (jsonError) {
-         // If not JSON, use the text directly
-        errorMessage = errorBody;
-      }
+    try {
+      console.log('📧 Attempting to send email to:', email);
       
-       // Log the full error for debugging
-      console.error('Email API error:', errorMessage);
-      throw new Error(errorMessage || `Failed to send email with status ${response.status}`);
+      const response = await fetch('https://two025-fit3134-unboxed-landing-page-v2.onrender.com/api/send-confirmation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      console.log('📬 Email API response status:', response.status);
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error('📛 Email API error response:', errorBody);
+
+        let errorMessage;
+        try {
+          const errorJson = JSON.parse(errorBody);
+          errorMessage = errorJson.error || errorJson.details || errorBody;
+        } catch {
+          errorMessage = errorBody;
+        }
+        
+        throw new Error(errorMessage || `Failed to send email with status ${response.status}`);
+      }
+
+      // Read and log success response
+      const successBody = await response.json();
+      console.log('📨 Email API success response:', successBody);
+      
+    } catch (error) {
+      console.error('🔥 Error in sendConfirmationEmail:', error);
+      throw error;
     }
   }
 }
