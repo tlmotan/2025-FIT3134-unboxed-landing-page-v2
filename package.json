@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && ng run landing-page-v2:server",
-    "build:vercel": "npm run build",
+    "build": "ng build",
+    "build:ssr": "ng build && ng run landing-page-v2:server",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:landing-page-v2": "node dist/landing-page-v2/server/server.mjs"
