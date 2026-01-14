@@ -34,7 +34,7 @@ export class SupabaseService {
   }
 
   private async sendConfirmationEmail(email: string): Promise<void> {
-    const response = await fetch('/api/send-confirmation', {
+    const response = await fetch('https://two025-fit3134-unboxed-landing-page-v2.onrender.com/api/send-confirmation', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
