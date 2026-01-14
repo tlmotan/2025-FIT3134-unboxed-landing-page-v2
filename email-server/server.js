@@ -68,7 +68,6 @@ app.post('/api/send-confirmation', async (req, res) => {
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
   }
-  return res.status(200).send('Confirmation sent!');
 
   // Email HTML template
   const emailHTML = `
