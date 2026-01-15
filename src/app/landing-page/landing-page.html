@@ -70,10 +70,10 @@
                     <button type="submit" class="submit-button" [disabled]="isSubmitting || isSuccess">
                         {{ isSuccess ? '✓ Joined!' : (isSubmitting ? 'Joining...' : 'Join Waitlist') }}
                     </button>
+                </form>
                     <p class="cta-disclaimer" [style.color]="clickMessage.includes('✅') ? '#10b981' : '#ef4444'" *ngIf="clickMessage">
                         {{ clickMessage }}
-                </p>
-                </form>
+                    </p>
                 <div class="form-badges">
                     <span class="form-badge-item"><i data-lucide="check"></i> No Spam</span>
                     <span class="form-badge-item"><i data-lucide="check"></i> Early Access</span>
