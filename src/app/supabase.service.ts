@@ -28,14 +28,14 @@ export class SupabaseService {
 
     if (error) throw error;
     
-    // Then, send confirmation email
-    try {
-      await this.sendConfirmationEmail(email);
-      console.log('✅ Confirmation email sent successfully to:', email);
-    } catch (emailError) {
-      console.error('❌ Failed to send confirmation email:', emailError);
-      // Don't throw - email saved successfully, email sending is secondary
-    }
+    // // Then, send confirmation email
+    // try {
+    //   await this.sendConfirmationEmail(email);
+    //   console.log('✅ Confirmation email sent successfully to:', email);
+    // } catch (emailError) {
+    //   console.error('❌ Failed to send confirmation email:', emailError);
+    //   // Don't throw - email saved successfully, email sending is secondary
+    // }
 
     return data;
   }
