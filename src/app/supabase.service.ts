@@ -77,4 +77,14 @@ export class SupabaseService {
       throw error;
     }
   }
+
+  async getWaitlistCount(): Promise<number> {
+    const { count, error } = await this.supabase
+      .from('email_signups')
+      .select('*', { count: 'exact', head: true });
+
+    if (error) throw error;
+
+    return count || 0;
+  }
 }

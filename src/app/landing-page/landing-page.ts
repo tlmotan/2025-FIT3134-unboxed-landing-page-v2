@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ChangeDetectorRef, NgZone, ElementRef, ViewChild, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectorRef, NgZone, ElementRef, ViewChild, OnDestroy, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Header } from "../header/header";
@@ -13,7 +13,7 @@ declare const lucide: any;
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.css',
 })
-export class LandingPage implements AfterViewInit, OnDestroy {
+export class LandingPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('container', { static: false }) containerRef!: ElementRef<HTMLDivElement>;
 
@@ -22,6 +22,7 @@ export class LandingPage implements AfterViewInit, OnDestroy {
   clickMessage = '';
   isSubmitting = false;
   isSuccess = false;
+  waitlistCountDisplay = 5;
 
   // Animation State
   private context!: CanvasRenderingContext2D;
@@ -42,6 +43,53 @@ export class LandingPage implements AfterViewInit, OnDestroy {
     this.isBrowser = isPlatformBrowser(this.platformId);
     if (this.isBrowser) {
       this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+  }
+
+  private computeDisplayNumber(count: number): number {
+    const buckets = [
+      { min: 0, max: 4, display: 0 },
+      { min: 5, max: 9, display: 5 },
+      { min: 10, max: 14, display: 10 },
+      { min: 15, max: 19, display: 15 },
+      { min: 20, max: 29, display: 20 },
+      { min: 30, max: 39, display: 30 },
+      { min: 40, max: 49, display: 40 },
+      { min: 50, max: 99, display: 50 },
+      { min: 100, max: 199, display: 100 },
+      { min: 200, max: 499, display: 200 },
+      { min: 500, max: 999, display: 500 },
+      { min: 1000, max: 1999, display: 1000 },
+      // Add more as needed
+    ];
+
+    for (const bucket of buckets) {
+      if (count >= bucket.min && count <= bucket.max) {
+        return bucket.display;
+      }
+    }
+
+    // For larger numbers, find the appropriate
+    if (count >= 2000) {
+      const power = Math.floor(Math.log10(count));
+      const base = Math.pow(10, power);
+      return Math.floor(count / base) * base;
+    }
+
+    return 0; // fallback
+  }
+
+  ngOnInit() {
+    this.loadCount();
+  }
+
+  private async loadCount() {
+    try {
+      const count = await this.supabaseService.getWaitlistCount();
+      this.waitlistCountDisplay = this.computeDisplayNumber(count);
+    } catch (error) {
+      console.error('Failed to fetch waitlist count:', error);
+      // Keep default
     }
   }
 
