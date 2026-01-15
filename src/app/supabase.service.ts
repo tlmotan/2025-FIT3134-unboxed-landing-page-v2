@@ -27,12 +27,12 @@ export class SupabaseService {
       .select();
 
     if (error) throw error;
-    
+
     // Then, send confirmation email (fire and forget)
     this.sendConfirmationEmail(email).catch(err => {
       console.error('❌ Background email sending failed:', err);
     });
-    
+
     // Return data immediately so UI updates
 
 
@@ -42,7 +42,7 @@ export class SupabaseService {
   private async sendConfirmationEmail(email: string): Promise<void> {
     try {
       console.log('📧 Attempting to send email to:', email);
-      
+
       const response = await fetch('https://two025-fit3134-unboxed-landing-page-v2.onrender.com/api/send-confirmation', {
         method: 'POST',
         headers: {
@@ -64,14 +64,14 @@ export class SupabaseService {
         } catch {
           errorMessage = errorBody;
         }
-        
+
         throw new Error(errorMessage || `Failed to send email with status ${response.status}`);
       }
 
       // Read and log success response
       const successBody = await response.json();
       console.log('📨 Email API success response:', successBody);
-      
+
     } catch (error) {
       console.error('🔥 Error in sendConfirmationEmail:', error);
       throw error;

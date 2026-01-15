@@ -16,6 +16,25 @@
     <!-- Main Content -->
     <main class="main-content">
         
+        <!-- Scroll Animation Hero -->
+        <section class="scroll-animation-container" #container>
+            <div class="canvas-wrapper">
+                <canvas #canvas class="sticky-canvas"></canvas>
+                
+                <!-- Text Overlay -->
+                <div class="animation-overlay" *ngIf="!showLoader">
+                    <h2 class="animation-headline">Trade collectibles with confidence.</h2>
+                    <p class="animation-subline">Verified. Protected. Built for collectors.</p>
+                </div>
+
+                <!-- Loader -->
+                <div class="animation-loader" *ngIf="showLoader">
+                    <div class="loader-spinner"></div>
+                    <p class="loader-text">Loading Experience {{ progress }}%</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Hero Section -->
         <section class="hero-section">
             
@@ -140,8 +159,8 @@
                 <p class="social-proof-title">Supported collections at launch</p>
                 <div class="brand-logos">
                      <div class="brand-logo brand-popmart">POP<span class="brand-popmart-light">MART</span></div>
-                     <div class="brand-logo brand-52toys">52TOYS</div>
-                     <div class="brand-logo brand-tokidoki"><div class="brand-icon-circle"></div>TOKIDOKI</div>
+                     <!-- <div class="brand-logo brand-52toys">52TOYS</div> -->
+                     <!-- <div class="brand-logo brand-tokidoki"><div class="brand-icon-circle"></div>TOKIDOKI</div> -->
                      <div class="brand-logo"><i data-lucide="triangle"></i> SKULLPANDA</div>
                      <div class="brand-logo brand-dimoo">DIMOO.</div>
                 </div>
