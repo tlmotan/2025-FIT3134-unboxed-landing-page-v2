@@ -65,6 +65,7 @@ export class LandingPage implements OnInit, AfterViewInit, OnDestroy {
 
     for (const bucket of buckets) {
       if (count >= bucket.min && count <= bucket.max) {
+        console.log(bucket.display)
         return bucket.display;
       }
     }
@@ -86,7 +87,10 @@ export class LandingPage implements OnInit, AfterViewInit, OnDestroy {
   private async loadCount() {
     try {
       const count = await this.supabaseService.getWaitlistCount();
-      this.waitlistCountDisplay = this.computeDisplayNumber(count);
+      this.ngZone.run(() => {
+        this.waitlistCountDisplay = this.computeDisplayNumber(count);
+        this.cdr.detectChanges();
+      });
     } catch (error) {
       console.error('Failed to fetch waitlist count:', error);
       // Keep default

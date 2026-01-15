@@ -84,7 +84,7 @@ export class SupabaseService {
       .select('*', { count: 'exact', head: true });
 
     if (error) throw error;
-
+    console.log(count)
     return count || 0;
   }
 }
