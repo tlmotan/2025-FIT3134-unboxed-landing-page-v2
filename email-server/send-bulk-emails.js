@@ -12,7 +12,35 @@ const transporter = nodemailer.createTransport({
 
 // Email addresses to send to
 const emailList = [
-  'rayhancheah@gmail.com',
+"ethanlimdc@gmail.com",
+"theoverking02@gmail.com",
+"johndevadhas525@gmail.com",
+"andeeznutz003@gmail.com",
+"sinjingzhao2005@gmail.com",
+"thegrimreaperino420@gmail.com",
+"cidkagenoumann@gmail.com",
+"mczj0757@gmail.com",
+"tjake995@gmail.com",
+"descomanicon@gmail.com",
+"rahil.mutum03@gmail.com",
+"marcuslwo2006@gmail.com",
+"menstrualbicycle@gmail.com",
+"jinghnglim@gmail.com",
+"jared.lim234@gmail.com",
+"jeremiahboey3@gmail.com",
+"caydenchoo@gmail.com,",
+"shermanlowch@gmail.com",
+"eejiao12@gmail.com",
+"praavin2754@gmail.com",
+"yanbinngg027@gmail.com",
+"kenzo.yannfeng@gmail.com",
+"kayrou.wong@gmail.com",
+"ryanyuwen@gmail.com",
+"gbaaronlam@gmail.com",
+"studiofunnies@gmail.com",
+"joanneyoussel@gmail.com",
+"hackerlim88@gmail.com",
+"charmainelxuen@gmail.com",
 ];
 
 // Email HTML template
